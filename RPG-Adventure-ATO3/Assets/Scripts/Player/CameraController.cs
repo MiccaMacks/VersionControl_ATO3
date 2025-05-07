@@ -12,13 +12,13 @@ public class CameraController : MonoBehaviour
      * 
      */
 
-    private float currentDistance = -6f;
+    private float currentDistance = -6f, desiredDistance = -6f;
 
     private float sensitivity = 2.5f;
     private float drag = 1.5f;
     private Vector2 mouseDir, smoothing, result;
     [SerializeField] private float clampLow = 20, clampHigh = 60;
-    [SerializeField] private float zoomLow = 3, zoomHigh = 16;
+    [SerializeField] private float zoomLow = 0, zoomHigh = 16;
 
 
     [SerializeField] private Transform player, camPos;
@@ -33,9 +33,16 @@ public class CameraController : MonoBehaviour
         }
         if (camPos == null)
         {
-            camPos = GetComponentInChildren<Camera>().gameObject.transform;
+            Debug.LogError("camPos needs to have the transform of the camera attatched to it.");
+        }
+        else if(camPos != null) 
+        { 
             currentDistance = camPos.localPosition.z;
         }
+
+        //turn off and lock cursor. will not stay here tho
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update()
@@ -45,10 +52,12 @@ public class CameraController : MonoBehaviour
             Look();
             if(Input.GetAxis("Mouse ScrollWheel") != 0)
             {
-                currentDistance += Input.GetAxis("Mouse ScrollWheel") * 4;
-                currentDistance = Mathf.Clamp(currentDistance, -zoomHigh, -zoomLow);
-                camPos.localPosition = new Vector3(0, 0, currentDistance);
+                currentDistance += Input.GetAxis("Mouse ScrollWheel") * 5;
+                desiredDistance += Input.GetAxis("Mouse ScrollWheel") * 5;
             }
+            currentDistance = Mathf.Clamp(currentDistance, -zoomHigh, -zoomLow);
+            desiredDistance = Mathf.Clamp(desiredDistance, -zoomHigh, -zoomLow);
+            camPos.localPosition = new Vector3(0, 0, currentDistance);
         }
     }
 
@@ -62,5 +71,26 @@ public class CameraController : MonoBehaviour
 
         transform.localRotation = Quaternion.AngleAxis(-result.y, Vector3.right);
         player.rotation = Quaternion.AngleAxis(result.x, player.up);
+
+        Debug.DrawLine(transform.position, camPos.position, Color.red, 0.6f);
+        if(Physics.Raycast(transform.position, camPos.position - transform.position, out RaycastHit hitInfo, zoomHigh))
+        {
+            Debug.Log(hitInfo.collider.name);
+            if (hitInfo.collider.CompareTag("Environment"))
+            {
+                if(-hitInfo.distance < desiredDistance)
+                {
+                    currentDistance = desiredDistance;
+                }
+                else
+                {
+                    currentDistance = -hitInfo.distance;
+                }
+            }
+        }
+        else
+        {
+            currentDistance = desiredDistance;
+        }
     }
 }

@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class CameraCorrector : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Transform CameraEndPos;
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private Vector3 smoothedPos;
+    [SerializeField] private Vector3 currentVel;
+    [SerializeField] private float smoothSpeed = 0.2f;
+
+    private void Update()
     {
-        
+        transform.localPosition = Vector3.Lerp(CameraEndPos.localPosition, transform.localPosition, 0.75f);
     }
 }
