@@ -14,10 +14,7 @@ Finlay's Tasks:
 	- the cameras position and rotation will adjust smoothly as the player moves ensuring 
 	  a clear and focused view of the action
 	- The player can optionally adjust the camera angle and zoom in/out using the mouse.
-- Stats and Leveling
-	- The player will have stats such as health, experience points, and level, which improve
-	  as they progress.
-	- the leveling system will improve stats as the player advances.
+- Respawn
 
 Jake's Tasks:
 - Interaction
@@ -27,7 +24,7 @@ Jake's Tasks:
 Michael's Tasks:
 - Saving and Loading Options
 - Saving and Loading Stats
-- Respawn
+- Stats and Leveling
 
 
 Branch Naming Conventions
