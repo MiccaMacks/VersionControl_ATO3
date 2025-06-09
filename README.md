@@ -18,8 +18,18 @@ Finlay's Tasks:
 
 Jake's Tasks:
 - Interaction
+  	- The player can interact with an interactable so long as the camera is focused on it
+	  and it is near.
+  	- Players can press the E key to interact with objects and characters.
 - Dialogue
+	- Advance through dialogue with the E key.
+	- Allow players to skip a dialogue interaction with the spacebar.
+   	- Supply more than one conversations when interacting with the same NPC.
 - Menu and Options
+	- General menu options: Play, Options, Quit
+	- Give screen resolution options in settings
+ 	- Supply a volume slider and a mute option
+    	- Allow switching between two graphics settings
 
 Michael's Tasks:
 - Saving and Loading Options
