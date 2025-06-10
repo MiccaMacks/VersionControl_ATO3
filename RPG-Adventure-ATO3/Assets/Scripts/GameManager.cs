@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     private GameObject PlayerRef;
 
-    public GameObject PlayerPrefab;
+    [SerializeField] private GameObject PlayerPrefab;
     public Transform LastCheckpoint;
 
     private void Awake()
@@ -22,34 +22,40 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //spawns player at default spawn pos on start.
     private void Start()
     {
-        PlayerRef = GameObject.FindGameObjectWithTag("Player");
+        SpawnPlayer(LastCheckpoint.position);
     }
 
+    //removes players ability to look around and move, and deletes mesh renderer to make them dissapear, then turns on death screen.
     public void KillPlayer()
     {
         PlayerRef.GetComponentInChildren<CameraController>().CanLook = false;
         Destroy(PlayerRef.GetComponentInChildren<MeshRenderer>());
         Destroy(PlayerRef.GetComponent<Movement>());
 
-        UIManager.Instance.DeathScreen.SetActive(true);
+        UIManager.Instance.ToggleDeathScreen(true);
 
-        StartCoroutine(RespawnPlayer());
+        //used before respawn button was added
+        //StartCoroutine(RespawnPlayer(0.6f));
     }
 
-    public void SpawnPlayer()
+    //Spawns player at given position. Deletes any previous versions of the player and turns of Death Screen.
+    public void SpawnPlayer(Vector3 spawnPos)
     {
-        UIManager.Instance.DeathScreen.SetActive(false);
+        UIManager.Instance.ToggleDeathScreen(false);
 
-        Destroy(PlayerRef);
-        PlayerRef = Instantiate(PlayerPrefab, LastCheckpoint.position, Quaternion.identity);
+        if (PlayerRef != null) { Destroy(PlayerRef); }
+
+        PlayerRef = Instantiate(PlayerPrefab, spawnPos, Quaternion.identity);
     }
 
-    private IEnumerator RespawnPlayer()
+    //Begins a timer to respawn the player.
+    public IEnumerator RespawnPlayer(float time)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(time);
 
-        SpawnPlayer();
+        SpawnPlayer(LastCheckpoint.position);
     }
 }
