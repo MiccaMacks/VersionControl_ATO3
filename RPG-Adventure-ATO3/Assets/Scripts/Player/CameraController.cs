@@ -159,6 +159,10 @@ public class CameraController : MonoBehaviour
                     currentDistance = -hitInfo.distance;
                 }
             }
+            else
+            {
+                currentDistance = desiredDistance;
+            }
         }
         else
         {
